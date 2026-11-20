@@ -1,23 +1,46 @@
-function categorieIMC(imc) {
-    if (imc < 18.5) return 'Sous-poids';
-    if (imc < 25) return 'Normal';
-    if (imc < 30) return 'Surpoids';
-    return 'Obésité';
-}
-
 function calculerIMC() {
-    const poids = parseFloat(document.querySelector('#imc-poids').value);
-    const taille = parseFloat(document.querySelector('#imc-taille').value);
 
-    // Vide, non numérique, nul ou négatif : pas de calcul
-    if (!(poids > 0) || !(taille > 0)) {
+    const poidsInput = document.getElementById("imc-poids");
+    const tailleInput = document.getElementById("imc-taille");
+
+    const poids = Number(poidsInput.value);
+    const taille = Number(tailleInput.value);
+
+    if (
+        poidsInput.value === "" ||
+        tailleInput.value === "" ||
+        !Number.isFinite(poids) ||
+        !Number.isFinite(taille) ||
+        poids <= 0 ||
+        taille <= 0
+    ) {
+        alert("Veuillez entrer un poids et une taille valides.");
+        return;
+    }
+
+    if (!poidsInput.checkValidity() || !tailleInput.checkValidity()) {
+        alert("Le poids doit être entre 20 et 300 kg et la taille entre 0.5 et 2.5 m.");
         return;
     }
 
     const imc = poids / (taille * taille);
 
-    document.querySelector('#imc-valeur').textContent = imc.toFixed(1);
-    document.querySelector('#imc-categorie').textContent = categorieIMC(imc);
+    document.getElementById("imc-valeur").textContent = imc.toFixed(1);
+
+    let categorie;
+
+    if (imc < 18.5) {
+        categorie = "Sous-poids";
+    } else if (imc < 25) {
+        categorie = "Normal";
+    } else if (imc < 30) {
+        categorie = "Surpoids";
+    } else {
+        categorie = "Obésité";
+    }
+
+    document.getElementById("imc-categorie").textContent = categorie;
 }
 
-document.querySelector('#imc-calculer').addEventListener('click', calculerIMC);
+document.getElementById("imc-calculer")
+    .addEventListener("click", calculerIMC);
